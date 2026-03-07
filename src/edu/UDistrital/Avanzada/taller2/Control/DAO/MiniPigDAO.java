@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * Permite validar duplicados e insertar registros.
  *
  * @author nath
- * @version 1.2
+ * @version 1.3
  * @since 2026-03-07
  */
 public class MiniPigDAO {
@@ -321,6 +321,44 @@ public class MiniPigDAO {
 
         insertar(dto);
         return true;
+    }
+    
+    /**
+     * Actualiza un minipig en la base de datos.
+     *
+     * @param dto DTO con los nuevos valores 
+     * @return true si actualizó 1 registro; false si no existía el código
+     * @throws SQLException si ocurre un error SQL
+     * @throws IllegalArgumentException si dto es null
+     */
+    public boolean actualizar(MiniPigDTO dto) throws SQLException {
+        if (dto == null) {
+            throw new IllegalArgumentException("dto no puede ser null");
+        }
+
+        String sql = "UPDATE minipig SET "
+                + "nombre = ?, genero = ?, raza = ?, color = ?, peso = ?, altura = ?, "
+                + "caracteristica1 = ?, caracteristica2 = ?, foto = ? "
+                + "WHERE codigo = ?";
+
+        try (Connection cn = conexion.getConnection();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            
+                        ps.setString(1, dto.getNombre());
+            ps.setString(2, dto.getGenero());
+            ps.setString(3, dto.getRaza());
+            ps.setString(4, dto.getColor());
+            ps.setString(5, dto.getPeso());
+            ps.setString(6, dto.getAltura());
+            ps.setString(7, dto.getCaracteristica1());
+            ps.setString(8, dto.getCaracteristica2());
+            ps.setString(9, dto.getFoto());
+
+            // Identificador: no cambia
+            ps.setInt(10, dto.getCodigo());
+
+            return ps.executeUpdate() > 0;
+        }
     }
     
      /**

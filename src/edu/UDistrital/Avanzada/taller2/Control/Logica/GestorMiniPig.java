@@ -17,12 +17,13 @@ import java.util.ArrayList;
  * </p>
  *
  * @author nath
- * @version 1.2
+ * @version 1.3
  * @since 2026-03-07
  */
 public class GestorMiniPig {
 
     private final MiniPigDAO dao;
+    private MiniPigDTO minipigEnEdicion;
 
     /**
      * Crea el gestor con su DAO.
@@ -126,5 +127,28 @@ public class GestorMiniPig {
      */
     public ArrayList<MiniPigDTO> consultarPorNombre(String nombre) throws SQLException {
         return dao.consultarPorNombre(nombre);
+    }
+    
+    /** Consulta y guarda el DTO en memoria */
+    
+    public MiniPigDTO cargarParaEdicionPorCodigo(int codigo) throws SQLException {
+        minipigEnEdicion = dao.consultarPorCodigo(codigo);
+        return minipigEnEdicion;
+    }
+
+    /** Aplica cambios al DTO en memoria  */
+    
+    public void aplicarCambiosEnMemoria(String nombre, String raza, String peso) {
+        if (minipigEnEdicion == null) return;
+        minipigEnEdicion.setNombre(nombre);
+        minipigEnEdicion.setRaza(raza);
+        minipigEnEdicion.setPeso(peso);
+    }
+
+    /** Aplica cambios Persistentes en BD el DTO que está en memoria. */
+    
+    public void guardarCambios() throws SQLException {
+        if (minipigEnEdicion == null) return;
+        dao.actualizar(minipigEnEdicion);
     }
 }
