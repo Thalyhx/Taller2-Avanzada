@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * Permite validar duplicados e insertar registros.
  *
  * @author nath
- * @version 1.0
+ * @version 1.1
  * @since 2026-03-07
  */
 public class MiniPigDAO {
@@ -239,5 +239,43 @@ public class MiniPigDAO {
 
         insertar(dto);
         return true;
+    }
+    
+     /**
+     * Elimina un minipig por código.
+     *
+     * @param codigo PK del minipig
+     * @return true si eliminó 1 registro; false si no existía
+     * @throws SQLException si ocurre un error SQL
+     */
+    public boolean eliminarPorCodigo(int codigo) throws SQLException {
+        String sql = "DELETE FROM minipig WHERE codigo = ?";
+
+        try (java.sql.Connection cn = conexion.getConnection();
+             java.sql.PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, codigo);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    /**
+     * Elimina un minipig por idMicrochip.
+     *
+     * @param idMicrochip UNIQUE del minipig
+     * @return true si eliminó 1 registro; false si no existía
+     * @throws SQLException si ocurre un error SQL
+     */
+    public boolean eliminarPorMicrochip(String idMicrochip) throws SQLException {
+        if (idMicrochip == null) return false;
+
+        String sql = "DELETE FROM minipig WHERE idMicrochip = ?";
+
+        try (java.sql.Connection cn = conexion.getConnection();
+             java.sql.PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setString(1, idMicrochip);
+            return ps.executeUpdate() > 0;
+        }
     }
 }
