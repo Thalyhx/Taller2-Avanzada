@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * </p>
  *
  * @author nath
- * @version 1.1
+ * @version 1.2
  * @since 2026-03-07
  */
 public class GestorMiniPig {
@@ -104,5 +104,27 @@ public class GestorMiniPig {
      */
     public ArrayList<MiniPigDTO> listar() throws SQLException {
         return dao.listaDeMiniPigs();
+    }
+    
+     /**
+     * Consulta todos los minipigs de una raza.
+     *
+     * @param raza raza a buscar
+     * @return lista de minipigs 
+     * @throws SQLException si ocurre un error en BD
+     */
+    public ArrayList<MiniPigDTO> consultarPorRaza(String raza) throws SQLException {
+        return dao.consultarPorRaza(raza);
+    }
+
+    /**
+     * Consulta minipigs por nombre (pueden existir repetidos)
+     *
+     * @param nombre nombre a buscar
+     * @return lista de minipigs 
+     * @throws SQLException si ocurre un error en BD
+     */
+    public ArrayList<MiniPigDTO> consultarPorNombre(String nombre) throws SQLException {
+        return dao.consultarPorNombre(nombre);
     }
 }

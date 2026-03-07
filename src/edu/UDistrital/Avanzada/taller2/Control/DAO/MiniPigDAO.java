@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * Permite validar duplicados e insertar registros.
  *
  * @author nath
- * @version 1.1
+ * @version 1.2
  * @since 2026-03-07
  */
 public class MiniPigDAO {
@@ -191,6 +191,88 @@ public class MiniPigDAO {
                 return rs.next();
             }
         }
+    }
+    
+     /**
+     * Consulta minipigs por raza.
+     *
+     * @param raza raza a buscar
+     * @return lista de minipigs (puede venir vacía)
+     * @throws SQLException si ocurre un error SQL
+     */
+    public java.util.ArrayList<MiniPigDTO> consultarPorRaza(String raza) throws SQLException {
+        java.util.ArrayList<MiniPigDTO> lista = new java.util.ArrayList<>();
+        if (raza == null) return lista;
+
+        String sql = "SELECT codigo, nombre, genero, idMicrochip, raza, color, peso, altura, "
+                   + "caracteristica1, caracteristica2, foto "
+                   + "FROM minipig WHERE raza = ?";
+
+        try (Connection cn = conexion.getConnection();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setString(1, raza);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(new MiniPigDTO(
+                            rs.getInt("codigo"),
+                            rs.getString("nombre"),
+                            rs.getString("genero"),
+                            rs.getString("idMicrochip"),
+                            rs.getString("raza"),
+                            rs.getString("color"),
+                            rs.getString("peso"),
+                            rs.getString("altura"),
+                            rs.getString("caracteristica1"),
+                            rs.getString("caracteristica2"),
+                            rs.getString("foto")
+                    ));
+                }
+            }
+        }
+        return lista;
+    }
+
+    /**
+     * Consulta minipigs por nombre.
+     *
+     * @param nombre nombre a buscar
+     * @return lista de minipigs (puede venir vacía)
+     * @throws SQLException si ocurre un error SQL
+     */
+    public java.util.ArrayList<MiniPigDTO> consultarPorNombre(String nombre) throws SQLException {
+        java.util.ArrayList<MiniPigDTO> lista = new java.util.ArrayList<>();
+        if (nombre == null) return lista;
+
+        String sql = "SELECT codigo, nombre, genero, idMicrochip, raza, color, peso, altura, "
+                   + "caracteristica1, caracteristica2, foto "
+                   + "FROM minipig WHERE nombre = ?";
+
+        try (Connection cn = conexion.getConnection();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setString(1, nombre);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(new MiniPigDTO(
+                            rs.getInt("codigo"),
+                            rs.getString("nombre"),
+                            rs.getString("genero"),
+                            rs.getString("idMicrochip"),
+                            rs.getString("raza"),
+                            rs.getString("color"),
+                            rs.getString("peso"),
+                            rs.getString("altura"),
+                            rs.getString("caracteristica1"),
+                            rs.getString("caracteristica2"),
+                            rs.getString("foto")
+                    ));
+                }
+            }
+        }
+        return lista;
     }
 
     /**
