@@ -10,7 +10,7 @@ package edu.UDistrital.Avanzada.taller2.Modelo;
  *</p>
  * 
  * @author nath
- * @version 1.0
+ * @version 1.1
  * @since 2026-03-06
  * 
  */
@@ -20,17 +20,17 @@ public class MiniPigDTO {
     private int codigo;    //No se puede modificar
     private String nombre;
     private String genero;
-    private int idMicrochip;   //No se puede modificar
+    private String idMicrochip;   //No se puede modificar
     private String raza;
     private String color;
-    private double peso;
-    private double altura;
+    private String peso;
+    private String altura;
     private String caracteristica1;
     private String caracteristica2;
     private String foto;
     
     // Constructor 
-    public MiniPigDTO(int codigo, String nombre, String genero, int idMicrochip, String raza, String color, double peso, double altura, String caracteristica1, String caracteristica2, String foto) {
+    public MiniPigDTO(int codigo, String nombre, String genero, String idMicrochip, String raza, String color, String peso, String altura, String caracteristica1, String caracteristica2, String foto) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.genero = genero;
@@ -65,7 +65,7 @@ public class MiniPigDTO {
         return genero;
     }
 
-    public int getIdMicrochip() {
+    public String getIdMicrochip() {
         return idMicrochip;
     }
 
@@ -77,11 +77,11 @@ public class MiniPigDTO {
         return color;
     }
 
-    public double getPeso() {
+    public String getPeso() {
         return peso;
     }
 
-    public double getAltura() {
+    public String getAltura() {
         return altura;
     }
 
@@ -115,11 +115,11 @@ public class MiniPigDTO {
         this.color = color;
     }
 
-    public void setPeso(double peso) {
+    public void setPeso(String peso) {
         this.peso = peso;
     }
 
-    public void setAltura(double altura) {
+    public void setAltura(String altura) {
         this.altura = altura;
     }
 
