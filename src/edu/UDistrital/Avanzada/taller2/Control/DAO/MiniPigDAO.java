@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * DAO de la tabla  minipig
@@ -37,15 +38,15 @@ public class MiniPigDAO {
      * @return lista de {@link MiniPigDTO}
      * @throws SQLException si ocurre un error en BD
      */
-    public java.util.ArrayList<MiniPigDTO> listaDeMiniPigs() throws SQLException {
-        java.util.ArrayList<MiniPigDTO> misMiniPigs = new java.util.ArrayList<>();
+    public ArrayList<MiniPigDTO> listaDeMiniPigs() throws SQLException {
+        ArrayList<MiniPigDTO> misMiniPigs = new ArrayList<>();
         String consulta = "SELECT codigo, nombre, genero, idMicrochip, raza, color, peso, altura, "
                 + "caracteristica1, caracteristica2, foto "
                 + "FROM minipig";
 
-        try (java.sql.Connection cn = conexion.getConnection();
-             java.sql.PreparedStatement ps = cn.prepareStatement(consulta);
-             java.sql.ResultSet rs = ps.executeQuery()) {
+        try (Connection cn = conexion.getConnection();
+                PreparedStatement ps = cn.prepareStatement(consulta);
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 MiniPigDTO miniPig = new MiniPigDTO(
@@ -200,8 +201,8 @@ public class MiniPigDAO {
      * @return lista de minipigs (puede venir vacía)
      * @throws SQLException si ocurre un error SQL
      */
-    public java.util.ArrayList<MiniPigDTO> consultarPorRaza(String raza) throws SQLException {
-        java.util.ArrayList<MiniPigDTO> lista = new java.util.ArrayList<>();
+    public ArrayList<MiniPigDTO> consultarPorRaza(String raza) throws SQLException {
+        ArrayList<MiniPigDTO> lista = new ArrayList<>();
         if (raza == null) return lista;
 
         String sql = "SELECT codigo, nombre, genero, idMicrochip, raza, color, peso, altura, "
@@ -241,8 +242,8 @@ public class MiniPigDAO {
      * @return lista de minipigs (puede venir vacía)
      * @throws SQLException si ocurre un error SQL
      */
-    public java.util.ArrayList<MiniPigDTO> consultarPorNombre(String nombre) throws SQLException {
-        java.util.ArrayList<MiniPigDTO> lista = new java.util.ArrayList<>();
+    public ArrayList<MiniPigDTO> consultarPorNombre(String nombre) throws SQLException {
+        ArrayList<MiniPigDTO> lista = new ArrayList<>();
         if (nombre == null) return lista;
 
         String sql = "SELECT codigo, nombre, genero, idMicrochip, raza, color, peso, altura, "
@@ -371,8 +372,8 @@ public class MiniPigDAO {
     public boolean eliminarPorCodigo(int codigo) throws SQLException {
         String sql = "DELETE FROM minipig WHERE codigo = ?";
 
-        try (java.sql.Connection cn = conexion.getConnection();
-             java.sql.PreparedStatement ps = cn.prepareStatement(sql)) {
+        try (Connection cn = conexion.getConnection();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
 
             ps.setInt(1, codigo);
             return ps.executeUpdate() > 0;
@@ -391,8 +392,8 @@ public class MiniPigDAO {
 
         String sql = "DELETE FROM minipig WHERE idMicrochip = ?";
 
-        try (java.sql.Connection cn = conexion.getConnection();
-             java.sql.PreparedStatement ps = cn.prepareStatement(sql)) {
+        try (Connection cn = conexion.getConnection();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
 
             ps.setString(1, idMicrochip);
             return ps.executeUpdate() > 0;
