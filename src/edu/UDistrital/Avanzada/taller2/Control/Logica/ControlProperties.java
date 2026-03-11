@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -19,7 +18,7 @@ import java.util.Properties;
  * Si existen campos "null" o vacíos, se dejan como {@code null} para completar manualmente en la Vista.
  *
  * @author nath
- * @version 1.1
+ * @version 1.2
  * @since 2026-03-07
  */
 public class ControlProperties {
@@ -30,17 +29,17 @@ public class ControlProperties {
         this.loader = new PropertiesLoader();
     }
 
-    public List<MiniPigDTO> cargarMiniPigs(File archivoProperties) throws IOException {
+    public ArrayList<MiniPigDTO> cargarMiniPigs(File archivoProperties) throws IOException {
         Properties props = loader.cargar(archivoProperties);
 
         if (props.isEmpty()) {
             throw new IllegalArgumentException("El archivo properties está vacío.");
         }
 
-        List<String> claves = new ArrayList<>(props.stringPropertyNames());
+        ArrayList<String> claves = new ArrayList<>(props.stringPropertyNames());
         claves.sort(Comparator.naturalOrder());
 
-        List<MiniPigDTO> lista = new ArrayList<>();
+        ArrayList<MiniPigDTO> lista = new ArrayList<>();
         for (String clave : claves) {
             String linea = props.getProperty(clave);
             if (linea == null || linea.trim().isEmpty()) continue;

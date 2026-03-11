@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Permite validar duplicados e insertar registros.
  *
  * @author nath
- * @version 1.3
+ * @version 1.4
  * @since 2026-03-07
  */
 public class MiniPigDAO {
