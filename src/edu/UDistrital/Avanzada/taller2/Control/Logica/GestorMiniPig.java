@@ -22,14 +22,19 @@ import java.util.ArrayList;
  */
 public class GestorMiniPig {
 
-    private final MiniPigDAO dao;
+    private MiniPigDAO dao;
     private MiniPigDTO minipigEnEdicion;
+    private ControlPrincipal cPrincipal;
 
     /**
      * Crea el gestor con su DAO.
      */
     public GestorMiniPig() {
         this.dao = new MiniPigDAO();
+    }
+    
+    public GestorMiniPig(ControlPrincipal cPrincipal){
+        this.cPrincipal = new ControlPrincipal();
     }
     
     /**
