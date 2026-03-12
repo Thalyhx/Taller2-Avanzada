@@ -3,20 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-/**
- *
- * @author nath
- */
 package edu.UDistrital.Avanzada.taller2.Control.Logica;
 
-import edu.UDistrital.Avanzada.taller2.Control.Logica.ControlPrincipal;
-
 /**
- * Launcher del aplicativo.
+ * Lanza el programa
+ *
+ * @author nath
+ * @version 1.0
  */
 public class Launcher {
 
-    public static void main(String[] args) {
-       new ControlPrincipal();
+    public static void main(String[] arg) {
+        //Para las buenas practicas esto es lo unico que debe existir en
+        //el launcher
+        new ControlPrincipal();
     }
 }

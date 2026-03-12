@@ -151,4 +151,44 @@ public class GestorMiniPig {
         if (minipigEnEdicion == null) return;
         dao.actualizar(minipigEnEdicion);
     }
+    
+        /**
+     * Consulta por microchip y deja el DTO cargado en memoria para edición.
+     * (Cumple el requerimiento: primero consultar, mantener DTO en memoria,
+     * luego modificar en memoria y finalmente persistir).
+     *
+     * @param microchip idMicrochip (UNIQUE)
+     * @return DTO consultado o null si no existe
+     * @throws SQLException si ocurre error SQL
+     */
+    public MiniPigDTO cargarParaEdicionPorMicrochip(String microchip) throws SQLException {
+        if (microchip == null || microchip.trim().isEmpty()) {
+            minipigEnEdicion = null;
+            return null;
+        }
+        minipigEnEdicion = dao.consultarPorMicrochip(microchip.trim());
+        return minipigEnEdicion;
+    }
+
+    /**
+     * Aplica en memoria los cambios de un DTO (completo) al DTO que está en edición.
+     * No permite modificar codigo ni idMicrochip (requerimiento).
+     *
+     * @param cambios DTO con los nuevos valores (puede venir con nulls, aquí decides política)
+     */
+    public void aplicarCambiosEnMemoriaCompleto(MiniPigDTO cambios) {
+        if (minipigEnEdicion == null || cambios == null) return;
+
+
+        minipigEnEdicion.setNombre(cambios.getNombre());
+        minipigEnEdicion.setGenero(cambios.getGenero());
+        minipigEnEdicion.setRaza(cambios.getRaza());
+        minipigEnEdicion.setColor(cambios.getColor());
+        minipigEnEdicion.setPeso(cambios.getPeso());
+        minipigEnEdicion.setAltura(cambios.getAltura());
+        minipigEnEdicion.setCaracteristica1(cambios.getCaracteristica1());
+        minipigEnEdicion.setCaracteristica2(cambios.getCaracteristica2());
+        minipigEnEdicion.setFoto(cambios.getFoto());
+    }
+    
 }
