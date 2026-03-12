@@ -13,45 +13,92 @@ import edu.UDistrital.Avanzada.taller2.Modelo.PropertiesLoader;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Properties;
 import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
 
 /**
- * Control principal 
- *
- * @author natha
+ * Control principal (Fachada).
+ * - Crea el ControlVista.
+ * - El ControlVista crea y controla la VentanaPrincipal.
+ * - Expone métodos para que ControlVista NO toque DAO/Gestor directamente.
  */
 public class ControlPrincipal {
 
-    private final ControlVista cVista;
     private final GestorMiniPig cMiniPig;
     private final PropertiesLoader loader;
 
+    private final ControlVista controlVista;
+
     public ControlPrincipal() {
-        this.cVista = new ControlVista(this);   
-        this.cMiniPig = new GestorMiniPig();   
+        this.cMiniPig = new GestorMiniPig();
         this.loader = new PropertiesLoader();
+
+        this.controlVista = new ControlVista(this);
+
+        // UI debe iniciar en el EDT
+        SwingUtilities.invokeLater(() -> controlVista.iniciarUI());
     }
 
-    // ---------------------------
-    // CARGA DESDE PROPERTIES
-    // ---------------------------
+    // =========================================================
+    // FACHADA hacia GestorMiniPig (CRUD + edición en memoria)
+    // =========================================================
 
-    /**
-     * Abre un JFileChooser  y retorna el File seleccionado.
-     * Si el usuario cancela, retorna null.
-     */
+    public ArrayList<MiniPigDTO> listarTodos() throws SQLException {
+        return cMiniPig.listar();
+    }
+
+    public boolean insertarSiNoExiste(MiniPigDTO dto) throws SQLException {
+        return cMiniPig.insertarSiNoExiste(dto);
+    }
+
+    public ArrayList<MiniPigDTO> insertarSiNoExisteYRefrescar(MiniPigDTO dto) throws SQLException {
+        return cMiniPig.insertarSiNoExisteYRefrescar(dto);
+    }
+
+    public ArrayList<MiniPigDTO> eliminarPorCodigoYRefrescar(int codigo) throws SQLException {
+        return cMiniPig.eliminarPorCodigoYRefrescar(codigo);
+    }
+
+    public ArrayList<MiniPigDTO> eliminarPorMicrochipYRefrescar(String microchip) throws SQLException {
+        return cMiniPig.eliminarPorMicrochipYRefrescar(microchip);
+    }
+
+    public MiniPigDTO cargarParaEdicionPorCodigo(int codigo) throws SQLException {
+        return cMiniPig.cargarParaEdicionPorCodigo(codigo);
+    }
+
+    public MiniPigDTO cargarParaEdicionPorMicrochip(String microchip) throws SQLException {
+        return cMiniPig.cargarParaEdicionPorMicrochip(microchip);
+    }
+
+    public void aplicarCambiosEnMemoria(MiniPigDTO cambios) {
+        cMiniPig.aplicarCambiosEnMemoriaCompleto(cambios);
+    }
+
+    public void guardarCambios() throws SQLException {
+        cMiniPig.guardarCambios();
+    }
+
+    public void imprimirMiniPigsEnConsolaAntesDeSalir() throws SQLException {
+        for (MiniPigDTO d : listarTodos()) {
+            System.out.println(d);
+        }
+    }
+
+    // =========================================================
+    // CARGA DESDE PROPERTIES (si aún lo necesitas)
+    // =========================================================
+
     public File seleccionarArchivoProperties() {
         JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
         fc.showOpenDialog(fc);
-        return fc.getSelectedFile(); 
+        return fc.getSelectedFile();
     }
 
-    /**
-     * Carga MiniPigs desde un archivo properties.
-     */
     public ArrayList<MiniPigDTO> cargarMiniPigs(File archivoProperties) throws IOException {
         if (archivoProperties == null) {
             throw new IllegalArgumentException("No se seleccionó archivo.");
@@ -75,9 +122,6 @@ public class ControlPrincipal {
         return lista;
     }
 
-    /**
-     * Flujo completo estilo “CargaObjeto”: abre chooser y retorna la lista parseada.
-     */
     public ArrayList<MiniPigDTO> cargarMiniPigsDesdeChooser() throws IOException {
         File f = seleccionarArchivoProperties();
         return cargarMiniPigs(f);
@@ -95,7 +139,7 @@ public class ControlPrincipal {
 
         String nombre = nullIfEmptyOrNull(datos[1]);
         String genero = nullIfEmptyOrNull(datos[2]);
-        String idMicrochip = nullIfEmptyOrNull(datos[3]); // alfanumérico
+        String idMicrochip = nullIfEmptyOrNull(datos[3]);
         String raza = nullIfEmptyOrNull(datos[4]);
         String color = nullIfEmptyOrNull(datos[5]);
         String peso = nullIfEmptyOrNull(datos[6]);
@@ -125,25 +169,4 @@ public class ControlPrincipal {
         }
         return Integer.parseInt(t);
     }
-
-    /**
-     * Verifica si el DTO tiene campos faltantes (null).
-     */
-    public boolean tieneCamposFaltantes(MiniPigDTO dto) {
-        if (dto == null) return true;
-        return dto.getNombre() == null
-                || dto.getGenero() == null
-                || dto.getIdMicrochip() == null
-                || dto.getRaza() == null
-                || dto.getColor() == null
-                || dto.getPeso() == null
-                || dto.getAltura() == null
-                || dto.getCaracteristica1() == null
-                || dto.getCaracteristica2() == null
-                || dto.getFoto() == null;
-    }
-
-    // getters si tu vista/otros controles necesitan acceso
-    public ControlVista getcVista() { return cVista; }
-    public GestorMiniPig getcMiniPig() { return cMiniPig; }
 }
