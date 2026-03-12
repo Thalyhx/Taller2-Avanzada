@@ -24,7 +24,7 @@ import javax.swing.SwingUtilities;
  * Control principal (Fachada).
  * - Crea el ControlVista.
  * - El ControlVista crea y controla la VentanaPrincipal.
- * - Expone métodos para que ControlVista NO toque DAO/Gestor directamente.
+ * - Expone métodos para que ControlVista 
  */
 public class ControlPrincipal {
 

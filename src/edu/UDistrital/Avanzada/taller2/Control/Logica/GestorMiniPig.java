@@ -98,7 +98,7 @@ public class GestorMiniPig {
     }
 
     /**
-     * Obtiene todos los minipigs (útil para refrescar sin eliminar).
+     * Obtiene todos los minipigs 
      *
      * @return lista de minipigs
      * @throws SQLException si ocurre un error en BD
@@ -154,8 +154,6 @@ public class GestorMiniPig {
     
         /**
      * Consulta por microchip y deja el DTO cargado en memoria para edición.
-     * (Cumple el requerimiento: primero consultar, mantener DTO en memoria,
-     * luego modificar en memoria y finalmente persistir).
      *
      * @param microchip idMicrochip (UNIQUE)
      * @return DTO consultado o null si no existe
@@ -171,7 +169,7 @@ public class GestorMiniPig {
     }
 
     /**
-     * Aplica en memoria los cambios de un DTO (completo) al DTO que está en edición.
+     * Aplica en memoria los cambios de un DTO 
      * No permite modificar codigo ni idMicrochip (requerimiento).
      *
      * @param cambios DTO con los nuevos valores (puede venir con nulls, aquí decides política)
