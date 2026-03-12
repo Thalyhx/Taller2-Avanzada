@@ -1,8 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.UDistrital.Avanzada.taller2.Control.DAO;
+
 
 import edu.UDistrital.Avanzada.taller2.Modelo.Conexion.Conexion;
 import edu.UDistrital.Avanzada.taller2.Modelo.MiniPigDTO;
@@ -14,30 +11,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * DAO de la tabla  minipig
- * Permite validar duplicados e insertar registros.
- *
+ * Implementación JDBC de {@link MiniPigDAO}.
  * @author nath
  * @version 1.4
  * @since 2026-03-07
  */
-public class MiniPigDAO {
+public class MiniPigDAO implements IMiniPigDAO {
 
     private final Conexion conexion;
 
-    /**
-     * Crea el DAO con la instancia de conexión.
-     */
     public MiniPigDAO() {
         this.conexion = Conexion.getInstancia();
     }
     
-     /**
-     * Lista todos los minipigs almacenados en la tabla {@code minipig}.
-     *
-     * @return lista de {@link MiniPigDTO}
-     * @throws SQLException si ocurre un error en BD
-     */
+    @Override
     public ArrayList<MiniPigDTO> listaDeMiniPigs() throws SQLException {
         ArrayList<MiniPigDTO> misMiniPigs = new ArrayList<>();
         String consulta = "SELECT codigo, nombre, genero, idMicrochip, raza, color, peso, altura, "
@@ -45,8 +32,8 @@ public class MiniPigDAO {
                 + "FROM minipig";
 
         try (Connection cn = conexion.getConnection();
-                PreparedStatement ps = cn.prepareStatement(consulta);
-                ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = cn.prepareStatement(consulta);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 MiniPigDTO miniPig = new MiniPigDTO(
@@ -65,17 +52,10 @@ public class MiniPigDAO {
                 misMiniPigs.add(miniPig);
             }
         }
-
         return misMiniPigs;
     }
-    
-    /**
-     * Consulta un minipig por su código.
-     *
-     * @param codigo código 
-     * @return {@link MiniPigDTO} si existe; si no existe retorna {@code null}
-     * @throws SQLException si ocurre un error SQL
-     */
+
+    @Override
     public MiniPigDTO consultarPorCodigo(int codigo) throws SQLException {
         String sql = "SELECT codigo, nombre, genero, idMicrochip, raza, color, peso, altura, "
                    + "caracteristica1, caracteristica2, foto "
@@ -108,13 +88,7 @@ public class MiniPigDAO {
         }
     }
 
-    /**
-     * Verifica si ya existe un registro con el código dado.
-     *
-     * @param codigo del minipig
-     * @return true si existe
-     * @throws SQLException error SQL
-     */
+    @Override
     public boolean existePorCodigo(int codigo) throws SQLException {
         String sql = "SELECT 1 FROM minipig WHERE codigo = ? LIMIT 1";
 
@@ -127,15 +101,8 @@ public class MiniPigDAO {
             }
         }
     }
-    
-    
-    /**
-     * Consulta un minipig por su id de microchip.
-     *
-     * @param idMicrochip idMicrochip (UNIQUE)
-     * @return {@link MiniPigDTO} si existe; si no existe retorna {@code null}
-     * @throws SQLException si ocurre un error SQL
-     */
+
+    @Override
     public MiniPigDTO consultarPorMicrochip(String idMicrochip) throws SQLException {
         if (idMicrochip == null) {
             return null;
@@ -172,13 +139,7 @@ public class MiniPigDAO {
         }
     }
 
-    /**
-     * Verifica si ya existe un registro con el microchip dado.
-     *
-     * @param idMicrochip UNIQUE del minipig
-     * @return true si existe
-     * @throws SQLException error SQL
-     */
+    @Override
     public boolean existePorMicrochip(String idMicrochip) throws SQLException {
         if (idMicrochip == null) return false;
 
@@ -193,14 +154,8 @@ public class MiniPigDAO {
             }
         }
     }
-    
-     /**
-     * Consulta minipigs por raza.
-     *
-     * @param raza raza a buscar
-     * @return lista de minipigs (puede venir vacía)
-     * @throws SQLException si ocurre un error SQL
-     */
+
+    @Override
     public ArrayList<MiniPigDTO> consultarPorRaza(String raza) throws SQLException {
         ArrayList<MiniPigDTO> lista = new ArrayList<>();
         if (raza == null) return lista;
@@ -235,13 +190,7 @@ public class MiniPigDAO {
         return lista;
     }
 
-    /**
-     * Consulta minipigs por nombre.
-     *
-     * @param nombre nombre a buscar
-     * @return lista de minipigs (puede venir vacía)
-     * @throws SQLException si ocurre un error SQL
-     */
+    @Override
     public ArrayList<MiniPigDTO> consultarPorNombre(String nombre) throws SQLException {
         ArrayList<MiniPigDTO> lista = new ArrayList<>();
         if (nombre == null) return lista;
@@ -276,12 +225,7 @@ public class MiniPigDAO {
         return lista;
     }
 
-    /**
-     * Inserta un minipig en la tabla.
-     *
-     * @param dto datos a insertar
-     * @throws SQLException error SQL
-     */
+    @Override
     public void insertar(MiniPigDTO dto) throws SQLException {
         String sql = "INSERT INTO minipig "
                 + "(codigo, nombre, genero, idMicrochip, raza, color, peso, altura, caracteristica1, caracteristica2, foto) "
@@ -306,13 +250,7 @@ public class MiniPigDAO {
         }
     }
 
-    /**
-     * Inserta evitando duplicados por {@code codigo} o {@code idMicrochip}.
-     *
-     * @param dto datos a insertar
-     * @return true si se insertó, false si ya existía
-     * @throws SQLException error SQL
-     */
+    @Override
     public boolean insertarSiNoExiste(MiniPigDTO dto) throws SQLException {
         if (dto == null) {
             throw new IllegalArgumentException("dto no puede ser null");
@@ -323,15 +261,8 @@ public class MiniPigDAO {
         insertar(dto);
         return true;
     }
-    
-    /**
-     * Actualiza un minipig en la base de datos.
-     *
-     * @param dto DTO con los nuevos valores 
-     * @return true si actualizó 1 registro; false si no existía el código
-     * @throws SQLException si ocurre un error SQL
-     * @throws IllegalArgumentException si dto es null
-     */
+
+    @Override
     public boolean actualizar(MiniPigDTO dto) throws SQLException {
         if (dto == null) {
             throw new IllegalArgumentException("dto no puede ser null");
@@ -344,8 +275,8 @@ public class MiniPigDAO {
 
         try (Connection cn = conexion.getConnection();
              PreparedStatement ps = cn.prepareStatement(sql)) {
-            
-                        ps.setString(1, dto.getNombre());
+
+            ps.setString(1, dto.getNombre());
             ps.setString(2, dto.getGenero());
             ps.setString(3, dto.getRaza());
             ps.setString(4, dto.getColor());
@@ -354,21 +285,13 @@ public class MiniPigDAO {
             ps.setString(7, dto.getCaracteristica1());
             ps.setString(8, dto.getCaracteristica2());
             ps.setString(9, dto.getFoto());
-
-            // Identificador: no cambia
             ps.setInt(10, dto.getCodigo());
 
             return ps.executeUpdate() > 0;
         }
     }
-    
-     /**
-     * Elimina un minipig por código.
-     *
-     * @param codigo PK del minipig
-     * @return true si eliminó 1 registro; false si no existía
-     * @throws SQLException si ocurre un error SQL
-     */
+
+    @Override
     public boolean eliminarPorCodigo(int codigo) throws SQLException {
         String sql = "DELETE FROM minipig WHERE codigo = ?";
 
@@ -380,13 +303,7 @@ public class MiniPigDAO {
         }
     }
 
-    /**
-     * Elimina un minipig por idMicrochip.
-     *
-     * @param idMicrochip UNIQUE del minipig
-     * @return true si eliminó 1 registro; false si no existía
-     * @throws SQLException si ocurre un error SQL
-     */
+    @Override
     public boolean eliminarPorMicrochip(String idMicrochip) throws SQLException {
         if (idMicrochip == null) return false;
 

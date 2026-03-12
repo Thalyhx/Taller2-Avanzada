@@ -2,12 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.UDistrital.Avanzada.taller2.Control;
+package edu.UDistrital.Avanzada.taller2.Control.Logica;
 
 /**
  *
  * @author natha
  */
 public class ControlPrincipal {
+
+    private ControlVista cVista;
+    private GestorMiniPig cMiniPig;
+    
+    public ControlPrincipal() {
+    }
     
 }

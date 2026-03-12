@@ -7,10 +7,9 @@
  *
  * @author nath
  */
-package edu.UDistrital.Avanzada.taller2;
+package edu.UDistrital.Avanzada.taller2.Control.Logica;
 
-import edu.UDistrital.Avanzada.taller2.Control.ControlPrincipal;
-import javax.swing.SwingUtilities;
+import edu.UDistrital.Avanzada.taller2.Control.Logica.ControlPrincipal;
 
 /**
  * Launcher del aplicativo.
@@ -18,8 +17,6 @@ import javax.swing.SwingUtilities;
 public class Launcher {
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-//            new ControlPrincipal().iniciar();
-        });
+       new ControlPrincipal();
     }
 }
