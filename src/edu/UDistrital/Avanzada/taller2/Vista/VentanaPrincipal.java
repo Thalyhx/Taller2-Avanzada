@@ -8,7 +8,15 @@ import edu.UDistrital.Avanzada.taller2.Modelo.MiniPigDTO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.util.List;
+import java.io.File;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+
+
+
 
 public class VentanaPrincipal extends JFrame implements IVentanaPrincipal {
 
@@ -34,10 +42,28 @@ public class VentanaPrincipal extends JFrame implements IVentanaPrincipal {
         contenedor.add(panelTabla, "TABLA");
         contenedor.add(panelInsertar, "INSERTAR");
         contenedor.add(panelCards, "CARDS");
+        
+        addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            // cierre directo
+            System.exit(0);
+        }
+        });
 
         setContentPane(contenedor);
         irATabla();
     }
+    
+
+    
+    public File pedirArchivoPropertiesMiniPigs() {
+    JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+    fc.setDialogTitle("Seleccione el archivo .properties de MiniPigs");
+    int res = fc.showOpenDialog(this);
+    if (res != JFileChooser.APPROVE_OPTION) return null;
+    return fc.getSelectedFile();
+}
 
     @Override public String getTextoBusqueda() { return panelTabla.txtBusqueda.getText(); }
 
@@ -66,7 +92,12 @@ public class VentanaPrincipal extends JFrame implements IVentanaPrincipal {
         panelInsertar.txtC2.setText("");
         panelInsertar.txtFoto.setText("");
     }
+    
 
+    
+    
+  
+ 
     @Override public void mostrarMensaje(String msg) { JOptionPane.showMessageDialog(this, msg); }
     @Override public void mostrarError(String msg) { JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE); }
 
@@ -76,6 +107,5 @@ public class VentanaPrincipal extends JFrame implements IVentanaPrincipal {
 
     @Override public void cerrar() { dispose(); }
 
-    // --- Edición no implementada aquí porque tu requisito para editar está en la tabla con botón editar.
-    // Si quieres, creamos PanelEditar aparte; por ahora usas insertar y tabla.
+
 }

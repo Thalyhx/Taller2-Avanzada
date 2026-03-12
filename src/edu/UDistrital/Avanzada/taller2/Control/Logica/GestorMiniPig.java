@@ -179,11 +179,7 @@ public class GestorMiniPig {
     public void aplicarCambiosEnMemoriaCompleto(MiniPigDTO cambios) {
         if (minipigEnEdicion == null || cambios == null) return;
 
-        // NO se cambia: codigo, idMicrochip
-        // minipigEnEdicion.setCodigo(...) NO existe o NO debe usarse
-        // minipigEnEdicion.setIdMicrochip(...) NO debe usarse
 
-        // Sí se puede cambiar:
         minipigEnEdicion.setNombre(cambios.getNombre());
         minipigEnEdicion.setGenero(cambios.getGenero());
         minipigEnEdicion.setRaza(cambios.getRaza());
